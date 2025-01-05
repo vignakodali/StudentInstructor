@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod
+spec:
+  containers:
+    - name: myapp-container
+      image: 339712832095.dkr.ecr.us-east-1.amazonaws.com/myapp-repo:1.0
+      ports:
+        - containerPort: 8080
+      command: ["java", "-jar", "/app.jar"]
+      env:
+        - name: AWS_ACCESS_KEY_ID
+          value: "AKIAU6GDWOJP4YT5FZ4C"
+        - name: AWS_SECRET_ACCESS_KEY
+          value: "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"
+  imagePullSecrets:
+    - name: ecr-secret
+
