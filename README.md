@@ -127,22 +127,3 @@ Use Postman to interact with the API:
           - name: myapp-container
             image: <ECR-repo-uri>/student-enrollment:1.0
   ```
-
-## Troubleshooting
-
-### Common Issues
-1. **ImagePullBackOff**: Ensure the image is correctly pushed to ECR and the Kubernetes secret for ECR is configured.
-2. **404 Not Found**: Verify the API endpoint path and ensure the application is running.
-
-### Debugging
-- Check logs:
-  ```bash
-  kubectl logs <pod-name>
-  ```
-- Describe pods:
-  ```bash
-  kubectl describe pod <pod-name>
-  ```
-
-## License
-This project is licensed under the MIT License.
