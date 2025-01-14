@@ -35,4 +35,9 @@ public class CourseController {
         courseService.deleteCourse(courseId);
         return ResponseEntity.ok("Course deleted successfully.");
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<Course>> searchCoursesByPrefix(@RequestParam String prefix) {
+        List<Course> courses = courseService.searchCoursesByPrefix(prefix);
+        return ResponseEntity.ok(courses);
+    }
 }

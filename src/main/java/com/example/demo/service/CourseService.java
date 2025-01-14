@@ -6,6 +6,7 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 @Service
 public class CourseService {
     private final DynamoDbTable<Course> courseTable;
@@ -26,4 +27,12 @@ public class CourseService {
     public void deleteCourse(String courseId) {
         courseTable.deleteItem(r -> r.key(k -> k.partitionValue(courseId)));
     }
-}
+        public List<Course> searchCoursesByPrefix(String prefix) {
+            return courseTable.scan()
+                    .items()
+                    .stream()
+                    .filter(course -> course.getCourseName().toLowerCase().startsWith(prefix.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+    
+    }
