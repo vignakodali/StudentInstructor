@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 import com.example.demo.model.Course;
+import com.example.demo.model.User;
 import com.example.demo.service.CourseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,4 +41,10 @@ public class CourseController {
         List<Course> courses = courseService.searchCoursesByPrefix(prefix);
         return ResponseEntity.ok(courses);
     }
+    @GetMapping("/{courseId}/people")
+    public ResponseEntity<List<User>> getPeopleInCourse(@PathVariable String courseId) {
+    List<User> users = courseService.getPeopleInCourse(courseId);
+    return ResponseEntity.ok(users);
+}
+
 }

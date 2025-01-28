@@ -28,6 +28,27 @@ public class DynamoDBTableCreator {
         createCourseEnrollmentTableIfNotExists();
         createAssignmentTableIfNotExists();
         createSubmissionTableIfNotExists();
+        createDiscussionTableIfNotExists();
+        createDiscussionReplyTableIfNotExists();
+        createTaskLocksTableIfNotExists(); // Add TaskLocks table creation
+    }
+
+    private void createTaskLocksTableIfNotExists() {
+        String tableName = "TaskLocks";
+        try {
+            dynamoDbClient.describeTable(r -> r.tableName(tableName));
+            System.out.println("Table already exists: " + tableName);
+        } catch (ResourceNotFoundException e) {
+            System.out.println("Creating table: " + tableName);
+            CreateTableRequest createTableRequest = CreateTableRequest.builder()
+                    .tableName(tableName)
+                    .keySchema(KeySchemaElement.builder().attributeName("TaskName").keyType(KeyType.HASH).build())
+                    .attributeDefinitions(AttributeDefinition.builder().attributeName("TaskName").attributeType(ScalarAttributeType.S).build())
+                    .provisionedThroughput(ProvisionedThroughput.builder().readCapacityUnits(5L).writeCapacityUnits(5L).build())
+                    .build();
+            dynamoDbClient.createTable(createTableRequest);
+            System.out.println("Table created successfully: " + tableName);
+        }
     }
 
     private void createTableIfNotExists(String tableName, String primaryKey) {
@@ -97,11 +118,51 @@ public class DynamoDBTableCreator {
             CreateTableRequest createTableRequest = CreateTableRequest.builder()
                     .tableName(tableName)
                     .keySchema(
-                            KeySchemaElement.builder().attributeName("submissionId").keyType(KeyType.HASH).build(),
-                            KeySchemaElement.builder().attributeName("assignmentId").keyType(KeyType.RANGE).build())
+                            KeySchemaElement.builder().attributeName("assignmentId").keyType(KeyType.HASH).build(),
+                            KeySchemaElement.builder().attributeName("studentId").keyType(KeyType.RANGE).build())
                     .attributeDefinitions(
-                            AttributeDefinition.builder().attributeName("submissionId").attributeType(ScalarAttributeType.S).build(),
-                            AttributeDefinition.builder().attributeName("assignmentId").attributeType(ScalarAttributeType.S).build())
+                            AttributeDefinition.builder().attributeName("assignmentId").attributeType(ScalarAttributeType.S).build(),
+                            AttributeDefinition.builder().attributeName("studentId").attributeType(ScalarAttributeType.S).build())
+                    .provisionedThroughput(ProvisionedThroughput.builder().readCapacityUnits(5L).writeCapacityUnits(5L).build())
+                    .build();
+            dynamoDbClient.createTable(createTableRequest);
+            System.out.println("Table created successfully: " + tableName);
+        }
+    }
+
+    private void createDiscussionTableIfNotExists() {
+        String tableName = "Discussion";
+        try {
+            dynamoDbClient.describeTable(r -> r.tableName(tableName));
+            System.out.println("Table already exists: " + tableName);
+        } catch (ResourceNotFoundException e) {
+            System.out.println("Creating table: " + tableName);
+            CreateTableRequest createTableRequest = CreateTableRequest.builder()
+                    .tableName(tableName)
+                    .keySchema(KeySchemaElement.builder().attributeName("discussionId").keyType(KeyType.HASH).build())
+                    .attributeDefinitions(AttributeDefinition.builder().attributeName("discussionId").attributeType(ScalarAttributeType.S).build())
+                    .provisionedThroughput(ProvisionedThroughput.builder().readCapacityUnits(5L).writeCapacityUnits(5L).build())
+                    .build();
+            dynamoDbClient.createTable(createTableRequest);
+            System.out.println("Table created successfully: " + tableName);
+        }
+    }
+
+    private void createDiscussionReplyTableIfNotExists() {
+        String tableName = "DiscussionReply";
+        try {
+            dynamoDbClient.describeTable(r -> r.tableName(tableName));
+            System.out.println("Table already exists: " + tableName);
+        } catch (ResourceNotFoundException e) {
+            System.out.println("Creating table: " + tableName);
+            CreateTableRequest createTableRequest = CreateTableRequest.builder()
+                    .tableName(tableName)
+                    .keySchema(
+                            KeySchemaElement.builder().attributeName("discussionId").keyType(KeyType.HASH).build(),
+                            KeySchemaElement.builder().attributeName("replyId").keyType(KeyType.RANGE).build())
+                    .attributeDefinitions(
+                            AttributeDefinition.builder().attributeName("discussionId").attributeType(ScalarAttributeType.S).build(),
+                            AttributeDefinition.builder().attributeName("replyId").attributeType(ScalarAttributeType.S).build())
                     .provisionedThroughput(ProvisionedThroughput.builder().readCapacityUnits(5L).writeCapacityUnits(5L).build())
                     .build();
             dynamoDbClient.createTable(createTableRequest);

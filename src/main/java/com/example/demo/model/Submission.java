@@ -4,8 +4,9 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 @DynamoDbBean
 public class Submission {
-    private String assignmentId;
-    private String studentId;
+    private String submissionId;
+    private String assignmentId; 
+    private String studentId;  
     private String submissionContent;
     private String submittedAt;
     private Integer marks;
@@ -22,6 +23,12 @@ public class Submission {
     }
     public void setStudentId(String studentId) {
         this.studentId = studentId;
+    }
+    public String getSubmissionId() {
+        return submissionId;
+    }
+    public void setSubmissionId(String submissionId) {
+        this.submissionId = submissionId;
     }
     public String getSubmissionContent() {
         return submissionContent;

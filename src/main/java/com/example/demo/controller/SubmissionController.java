@@ -20,11 +20,17 @@ public class SubmissionController {
     public ResponseEntity<List<Submission>> getSubmissionsByAssignmentId(@PathVariable String assignmentId) {
         return ResponseEntity.ok(submissionService.getSubmissionsByAssignmentId(assignmentId));
     }
-    @PatchMapping("/{assignmentId}/{studentId}")
+    @GetMapping("/{assignmentId}/{studentId}")
+    public ResponseEntity<Submission> getSubmissionByAssignmentAndStudent(
+            @PathVariable String assignmentId,
+            @PathVariable String studentId) {
+        return ResponseEntity.ok(submissionService.getSubmissionByAssignmentAndStudent(assignmentId, studentId));
+    }
+    @PatchMapping("/{assignmentId}/{studentId}")//manually updating grades
     public ResponseEntity<String> gradeSubmission(
             @PathVariable String assignmentId,
             @PathVariable String studentId,
-            @RequestBody int marks) {
+            @RequestBody Integer marks) {
         submissionService.gradeSubmission(assignmentId, studentId, marks);
         return ResponseEntity.ok("Submission graded successfully.");
     }
